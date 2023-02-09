@@ -1,0 +1,82 @@
+import qrcode
+from PIL import Image
+
+
+def generate_qr_code(data, filename):
+    qr = qrcode.QRCode(
+        version=1,
+        box_size=10,
+        border=5
+    )
+    qr.add_data("hello")
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save(filename)
+
+    img.show()
+
+
+# Example usage
+generate_qr_code("Hello, QR Code!", "qr_code.png")
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import qrcode
+from tkinter import *
+from tkinter import filedialog
+from PIL import Image, ImageTk
+
+
+def generate_qr_code(data, filename):
+    qr = qrcode.QRCode(
+        version=1,
+        box_size=10,
+        border=5
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save(filename)
+
+    return img
+
+
+def on_generate_button_click():
+    data = input_text.get()
+    filename = filedialog.asksaveasfilename(defaultextension=".png")
+    if filename:
+        img = generate_qr_code(data, filename)
+        display_image(img)
+
+
+def display_image(img):
+    image = ImageTk.PhotoImage(img)
+    image_label.config(image=image)
+    image_label.image = image
+
+
+# Create the user interface
+root = Tk()
+root.title("QR Code Generator")
+
+input_text = StringVar()
+input_entry = Entry(root, textvariable=input_text)
+input_entry.pack(pady=10)
+
+generate_button = Button(root, text="Generate QR Code", command=on_generate_button_click)
+generate_button.pack(pady=10)
+
+image_label = Label(root)
+image_label.pack(pady=10)
+
+root.mainloop()
